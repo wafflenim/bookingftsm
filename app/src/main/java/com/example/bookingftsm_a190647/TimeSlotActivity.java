@@ -72,9 +72,9 @@ public class TimeSlotActivity extends AppCompatActivity {
     TimeSlotAdapter adapterTimeSlot;
     //Calendar calendar;
     DatePickerDialog datePicker;
-    EditText selectDate;
+    TextView selectDate;
     private String date;
-    private String time;
+    private String timeslot;
 
     SimpleDateFormat dateFormat;
     ProgressDialog pd;
@@ -86,7 +86,7 @@ public class TimeSlotActivity extends AppCompatActivity {
         setContentView(R.layout.activity_time_slot);
 
         //select date
-        selectDate = (EditText) findViewById(R.id.date); //SIMPAN DALAM FIREBASE
+        selectDate = (TextView) findViewById(R.id.date); //SIMPAN DALAM FIREBASE
         dateFormat = new SimpleDateFormat("dd_MM_yyyy");
 
         // Retrieve the room name from the intent extras
@@ -130,8 +130,8 @@ public class TimeSlotActivity extends AppCompatActivity {
                     }
                 }, year_m, month_m, day_m);
                 datePicker.show();
-                pd.setTitle("Memuat turun kalendar");
-                pd.show();
+                //pd.setTitle("Memuat turun kalendar");
+                //   pd.show();
                 showData(roomName, "");
 
             }
@@ -190,11 +190,7 @@ public class TimeSlotActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-    private void uploadData(String roomName, String reason, String selected_date, Long timeSlot) {
+    private void uploadData(String roomName, String reason, String selected_date, String timeslot) {
 
         pd.setTitle("Adding Booking to Database");
         pd.show();
@@ -212,7 +208,7 @@ public class TimeSlotActivity extends AppCompatActivity {
         doc.put("roomName", roomName);
         doc.put("reason", reason);
         doc.put("date", selected_date);
-        doc.put("slot", timeSlot);
+        doc.put("slot", timeslot);
 
         // Create a new booking document in the subcollection
     //    roomSubcollectionRef.document(id).set(new Bookings(id, roomName, reason, selected_date, timeSlot))
