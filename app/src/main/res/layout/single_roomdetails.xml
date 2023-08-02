@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+
+    <ImageView
+        android:id="@+id/image_single_roomdetails"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/toolbar2"
+        android:layout_margin="40dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/image" />
+
+    <TextView
+        android:id="@+id/roomName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_single_roomdetails"
+        android:background="@color/red"
+        android:gravity="center"
+        android:text="Bilik Kuliah 1"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvroomlocation"
+        android:layout_width="205dp"
+        android:layout_height="31dp"
+        android:layout_below="@+id/roomName"
+        android:layout_marginTop="0dp"
+        android:background="@color/red"
+        android:gravity="right"
+        android:text="Lokasi: "
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/roomLocation"
+        android:layout_width="209dp"
+        android:layout_height="31dp"
+        android:layout_below="@+id/roomName"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="-210dp"
+        android:layout_toRightOf="@+id/tvroomlocation"
+        android:background="@color/red"
+        android:gravity="left"
+        android:text="Blok B"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvroomCapacity"
+        android:layout_width="205dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/roomLocation"
+        android:layout_marginTop="0dp"
+        android:background="@color/red"
+        android:gravity="right"
+        android:text="Kapasiti: "
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/roomCapacity"
+        android:layout_width="208dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/roomLocation"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="-2dp"
+        android:layout_toRightOf="@+id/tvroomCapacity"
+        android:background="@color/red"
+        android:gravity="left"
+        android:text="40"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvroomUsage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/roomCapacity"
+        android:layout_marginTop="0dp"
+        android:background="@color/red"
+        android:gravity="center"
+        android:text="Kegunaan: "
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/roomKuliah"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvroomUsage"
+        android:layout_marginTop="0dp"
+        android:background="@color/red"
+        android:gravity="center"
+        android:text="Kuliah"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/roomAktivitiKelab"
+        android:layout_width="133dp"
+        android:layout_height="27dp"
+        android:layout_below="@+id/tvroomUsage"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toRightOf="@+id/roomKuliah"
+        android:background="@color/red"
+        android:gravity="center"
+        android:text="Aktiviti Kelab"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/roomMesyuarat"
+        android:layout_width="130dp"
+        android:layout_height="27dp"
+        android:layout_below="@+id/tvroomUsage"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toRightOf="@+id/roomAktivitiKelab"
+        android:background="@color/red"
+        android:gravity="center"
+        android:text="Mesyuarat"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/roomMakmal"
+        android:layout_width="125dp"
+        android:layout_height="27dp"
+        android:layout_below="@+id/tvroomUsage"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toRightOf="@+id/roomMesyuarat"
+        android:background="@color/red"
+        android:gravity="center"
+        android:text="Makmal"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

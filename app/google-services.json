@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "500179256309",
+    "project_id": "bookingftsm",
+    "storage_bucket": "bookingftsm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500179256309:android:f40665781b2c8343b3d6bc",
+        "android_client_info": {
+          "package_name": "com.example.bookingftsm_a190647"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500179256309-plf7emacjhvn54qunh3ac15qp285mc28.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAveC_l8MMzu6-lcofMPc6AM7cRNd0M2_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500179256309-plf7emacjhvn54qunh3ac15qp285mc28.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
