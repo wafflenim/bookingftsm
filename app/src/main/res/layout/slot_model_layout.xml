@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="7:00AM-8:00PM"
-            android:textColor="@color/red"
-            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
@@ -32,10 +32,8 @@
             android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:text="Available"
-            android:textColor="@color/red"
-            android:textSize="16sp" />
-
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

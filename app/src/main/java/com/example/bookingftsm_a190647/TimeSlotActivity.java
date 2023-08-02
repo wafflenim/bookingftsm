@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,11 +45,16 @@ import com.google.firebase.firestore.CollectionReference;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -64,9 +70,7 @@ public class TimeSlotActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
 
     List<TimeSlot> modelList = new ArrayList<>();
-    RecyclerView mRecyclerView;
-
-    //layout manager for recycler view
+    GridView gridViewTimeSlot;
     //firestore instance
     FirebaseFirestore db;
     TimeSlotAdapter adapterTimeSlot;
@@ -78,7 +82,6 @@ public class TimeSlotActivity extends AppCompatActivity {
 
     SimpleDateFormat dateFormat;
     ProgressDialog pd;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,11 +103,14 @@ public class TimeSlotActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        recyclerViewTimeSlot = findViewById(R.id.recyclerViewTimeSlot);
-        //set recycler view properties
+//      set grid view
+        gridViewTimeSlot = findViewById(R.id.gridViewTimeSlot);
+
         layoutManager = new LinearLayoutManager(this);
-        recyclerViewTimeSlot.setLayoutManager(layoutManager);
-        recyclerViewTimeSlot.setHasFixedSize(true);
+        gridViewTimeSlot.setNumColumns(2);
+        gridViewTimeSlot.setHorizontalSpacing(8);
+        gridViewTimeSlot.setVerticalSpacing(8);
+        gridViewTimeSlot.setPadding(8, 8, 8, 8);
 
         Button btnKembali = findViewById(R.id.btn_kembali);
         Button btnTempah = findViewById(R.id.btn_tempah);
@@ -118,7 +124,6 @@ public class TimeSlotActivity extends AppCompatActivity {
                 int year_m = calendar.get(Calendar.YEAR); //current year
                 int month_m = calendar.get(Calendar.MONTH); //current month
                 int day_m = calendar.get(Calendar.DAY_OF_MONTH); //CURRENT DAY
-
 
                 //date picker dialog
                 datePicker = new DatePickerDialog(TimeSlotActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -159,8 +164,8 @@ public class TimeSlotActivity extends AppCompatActivity {
     }
 
         //String data == the text in the search input. if "" then just display all
-        private void showData (String roomName, String text){
-
+        private void showData(String roomName, String text) {
+        //    modelList.clear(); //ini tak sure lagi
 
             // Get a reference to the "Room Booking" collection
             CollectionReference dataRef  = db.collection("Timeslot");
@@ -171,24 +176,35 @@ public class TimeSlotActivity extends AppCompatActivity {
             query.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot doc : task.getResult()) {
-                        TimeSlot model = new TimeSlot(
-                                doc.getString("timeslot"),
-                                doc.getString("status")
-                        );
-
+                        TimeSlot model = new TimeSlot(doc.getString("timeslot"), doc.getString("status"));
                         modelList.add(model);
                     }
+                    // Sort the modelList based on the timeslot
+                    Collections.sort(modelList, new Comparator<TimeSlot>() {
+                        SimpleDateFormat sdf = new SimpleDateFormat("h.mma", Locale.US);
 
-                        adapterTimeSlot = new TimeSlotAdapter(TimeSlotActivity.this, modelList);
-                        recyclerViewTimeSlot.setAdapter(adapterTimeSlot);
-                    } else {
-                        Toast.makeText(TimeSlotActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public int compare(TimeSlot ts1, TimeSlot ts2) {
+                            try {
+                                Date time1 = sdf.parse(ts1.getTimeslot().split("-")[0]);
+                                Date time2 = sdf.parse(ts2.getTimeslot().split("-")[0]);
+                                return time1.compareTo(time2);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            return 0;
+                        }
+                    });
+                    // Initialize the TimeSlotAdapter with the populated modelList
+                    adapterTimeSlot = new TimeSlotAdapter(TimeSlotActivity.this, modelList);
 
+                    // Set the adapter to the gridViewTimeSlot
+                    gridViewTimeSlot.setAdapter(adapterTimeSlot);
+                } else {
+                    Toast.makeText(TimeSlotActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
-
-
 
     private void uploadData(String roomName, String reason, String selected_date, String timeslot) {
 
@@ -210,20 +226,18 @@ public class TimeSlotActivity extends AppCompatActivity {
         doc.put("date", selected_date);
         doc.put("slot", timeslot);
 
-        // Create a new booking document in the subcollection
-    //    roomSubcollectionRef.document(id).set(new Bookings(id, roomName, reason, selected_date, timeSlot))
-         //      .addOnCompleteListener(new OnCompleteListener<Void>() {
-            //        @Override
-            //        public void onComplete(@NonNull Task<Void> task) {
-            //            pd.dismiss();
-            //            if (task.isSuccessful()) {
-            //                Toast.makeText(TimeSlotActivity.this, "Booking added successfully!", Toast.LENGTH_SHORT).show();
-             //           } else {
-             //               Toast.makeText(TimeSlotActivity.this, "Failed to add booking", Toast.LENGTH_SHORT).show();
-             //           }
-            //        }
-           //     });
     }
-
-
+    // Create a new booking document in the subcollection
+    //    roomSubcollectionRef.document(id).set(new Bookings(id, roomName, reason, selected_date, timeSlot))
+    //      .addOnCompleteListener(new OnCompleteListener<Void>() {
+    //        @Override
+    //        public void onComplete(@NonNull Task<Void> task) {
+    //            pd.dismiss();
+    //            if (task.isSuccessful()) {
+    //                Toast.makeText(TimeSlotActivity.this, "Booking added successfully!", Toast.LENGTH_SHORT).show();
+    //           } else {
+    //               Toast.makeText(TimeSlotActivity.this, "Failed to add booking", Toast.LENGTH_SHORT).show();
+    //           }
+    //        }
+    //     });
 }

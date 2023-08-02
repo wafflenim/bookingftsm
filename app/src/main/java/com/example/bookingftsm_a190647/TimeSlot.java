@@ -2,6 +2,7 @@ package com.example.bookingftsm_a190647;
 
 public class TimeSlot {
 
+
     public String timeslot;
     private String status;
 
