@@ -21,6 +21,7 @@ public class TimeSlotAdapter extends BaseAdapter {
     Context context;
     List<TimeSlot> modelList;
     List<CardView> cardViewList;
+    private int selectedPosition = -1; // -1 means no time slot is selected initially
 
 
     public TimeSlotAdapter(Context context, List<TimeSlot> modelList) {
@@ -28,7 +29,6 @@ public class TimeSlotAdapter extends BaseAdapter {
         this.modelList = modelList;
         cardViewList = new ArrayList<>();
     }
-
 
 
     @Override
@@ -46,6 +46,32 @@ public class TimeSlotAdapter extends BaseAdapter {
         return position;
     }
 
+    // Define the OnItemClickListener interface
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    // Method to set the selected position
+    public void setSelectedPosition(int position) {
+        selectedPosition = position;
+        notifyDataSetChanged(); // Notify the adapter to refresh the views
+    }
+
+    // You can also add a method to get the selected time slot
+    public TimeSlot getSelectedTimeSlot() {
+        if (selectedPosition != -1) {
+            return modelList.get(selectedPosition);
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -56,17 +82,17 @@ public class TimeSlotAdapter extends BaseAdapter {
         TextView txtTimeSlotDescription = convertView.findViewById(R.id.txt_time_slot_description);
 
         TimeSlot timeSlot = modelList.get(position);
-        txtTimeSlot.setText(timeSlot.getTimeslot());
+        txtTimeSlot.setText(Common.convertTimeSlotToString(position));
 
         if (modelList.size() == 0) {
             txtTimeSlotDescription.setText("Available");
             convertView.setEnabled(true);
-            convertView.setBackgroundResource(android.R.color.holo_red_light);
+            convertView.setBackgroundResource(selectedPosition == position ? R.color.blue : android.R.color.holo_red_light);
         } else {
             boolean isBooked = false;
             for (TimeSlot slotValue : modelList) {
                 String slot = slotValue.getTimeslot();
-                if (slot.equals(position)) {
+                if (slot.equals(Common.convertTimeSlotToString(position))) {
                     isBooked = true;
                     break;
                 }
@@ -78,13 +104,16 @@ public class TimeSlotAdapter extends BaseAdapter {
             } else {
                 txtTimeSlotDescription.setText("Available");
                 convertView.setEnabled(true);
-                convertView.setBackgroundResource(android.R.color.holo_red_light);
+                convertView.setBackgroundResource(selectedPosition == position ? R.color.blue : android.R.color.holo_red_light);
             }
-        }
 
+
+        }
         return convertView;
     }
 }
+
+
 
 
 

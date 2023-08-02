@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -36,6 +37,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -70,6 +72,8 @@ public class TimeSlotActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
 
     List<TimeSlot> modelList = new ArrayList<>();
+    private int selectedPosition = -1;
+
     GridView gridViewTimeSlot;
     //firestore instance
     FirebaseFirestore db;
@@ -88,6 +92,15 @@ public class TimeSlotActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_slot);
 
+        Button btnKembali = findViewById(R.id.btn_kembali);
+        Button btnTempah = findViewById(R.id.btn_tempah);
+        btnKembali.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SearchRoomActivity.class);
+                startActivity(intent);
+            }
+        });
         //select date
         selectDate = (TextView) findViewById(R.id.date); //SIMPAN DALAM FIREBASE
         dateFormat = new SimpleDateFormat("dd_MM_yyyy");
@@ -102,18 +115,6 @@ public class TimeSlotActivity extends AppCompatActivity {
         inputTujuan = findViewById(R.id.et_tujuan);
 
         db = FirebaseFirestore.getInstance();
-
-//      set grid view
-        gridViewTimeSlot = findViewById(R.id.gridViewTimeSlot);
-
-        layoutManager = new LinearLayoutManager(this);
-        gridViewTimeSlot.setNumColumns(2);
-        gridViewTimeSlot.setHorizontalSpacing(8);
-        gridViewTimeSlot.setVerticalSpacing(8);
-        gridViewTimeSlot.setPadding(8, 8, 8, 8);
-
-        Button btnKembali = findViewById(R.id.btn_kembali);
-        Button btnTempah = findViewById(R.id.btn_tempah);
 
         pd = new ProgressDialog(this);
         //open calendar
@@ -137,34 +138,47 @@ public class TimeSlotActivity extends AppCompatActivity {
                 datePicker.show();
                 //pd.setTitle("Memuat turun kalendar");
                 //   pd.show();
-                showData(roomName, "");
+                showTimeSlot(roomName, "");
 
             }
         });
+//      set grid view
+        gridViewTimeSlot = findViewById(R.id.gridViewTimeSlot);
 
-        btnKembali.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SearchRoomActivity.class);
-                startActivity(intent);
-            }
-        });
+        layoutManager = new LinearLayoutManager(this);
+        gridViewTimeSlot.setNumColumns(2);
+        gridViewTimeSlot.setHorizontalSpacing(8);
+        gridViewTimeSlot.setVerticalSpacing(8);
+        gridViewTimeSlot.setPadding(8, 8, 8, 8);
 
         btnTempah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //masuk data dlm db
-                String roomName = tvRoomName.getText().toString().trim();
-                String reason = inputTujuan.getText().toString().trim();
+                // Get the selected time slot from the adapter
+                TimeSlot selectedTimeSlot = adapterTimeSlot.getSelectedTimeSlot();
 
-                //call function to upload
-                //   uploadData(roomName, reason, selected_date, timeSlot);
+                // Check if a time slot is selected
+                if (selectedTimeSlot != null) {
+                    // Get the time slot value
+                    String timeSlot = selectedTimeSlot.getTimeslot();
+
+                    // Get other input values (roomName, reason, selected_date)
+                    String roomName = tvRoomName.getText().toString().trim();
+                    String reason = inputTujuan.getText().toString().trim();
+                    String selected_date = selectDate.getText().toString().trim();
+
+                    // Call the function to upload
+                    uploadData(roomName, reason, selected_date, timeSlot);
+                } else {
+                    Toast.makeText(TimeSlotActivity.this, "Please select a time slot.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
         //String data == the text in the search input. if "" then just display all
-        private void showData(String roomName, String text) {
+        private void showTimeSlot(String roomName, String text) {
         //    modelList.clear(); //ini tak sure lagi
 
             // Get a reference to the "Room Booking" collection
@@ -200,6 +214,17 @@ public class TimeSlotActivity extends AppCompatActivity {
 
                     // Set the adapter to the gridViewTimeSlot
                     gridViewTimeSlot.setAdapter(adapterTimeSlot);
+
+                    gridViewTimeSlot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            // Update the selected position and refresh the adapter
+                            selectedPosition = position;
+                            adapterTimeSlot.setSelectedPosition(position);
+                        }
+                    });
+
+
                 } else {
                     Toast.makeText(TimeSlotActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
                 }
@@ -213,12 +238,6 @@ public class TimeSlotActivity extends AppCompatActivity {
         //random id
         String id = UUID.randomUUID().toString();
 
-        // Get a reference to the "Room Bookings" collection
-        CollectionReference roomBookingsRef = db.collection("Room Bookings");
-
-        // Get a reference to the specific room's subcollection using the roomName
-        CollectionReference roomSubcollectionRef = roomBookingsRef.document(roomName).collection(roomName);
-
         Map<String, Object> doc = new HashMap<>();
         doc.put("id", id);
         doc.put("roomName", roomName);
@@ -226,18 +245,87 @@ public class TimeSlotActivity extends AppCompatActivity {
         doc.put("date", selected_date);
         doc.put("slot", timeslot);
 
+        // Get a reference to the "Room Booking" collection
+        CollectionReference roomBookingRef = db.collection("Room Booking");
+
+        // Get a reference to the specific room's document using the roomName
+        DocumentReference roomDocRef = roomBookingRef.document(roomName);
+
+        // Get a reference to the "Bookings" subcollection under the specific room's document
+        CollectionReference bookingsRef = roomDocRef.collection("Bookings");
+        // Get a reference to the specific room's subcollection using the roomName
+        bookingsRef.document(id).set(new Bookings(id, roomName, reason, selected_date, timeslot))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        pd.dismiss();
+                        if (task.isSuccessful()) {
+
+                            Toast.makeText(TimeSlotActivity.this, "Booking added successfully!", Toast.LENGTH_SHORT).show();
+                            // Call a method to update the Firestore document for the selected time slot as booked
+                            updateSelectedTimeSlotStatus(selected_date, timeslot);
+                        } else {
+                            Toast.makeText(TimeSlotActivity.this, "Failed to add booking", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(TimeSlotActivity.this, "Failed to add booking", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+        // Create a new booking document in the subcollection with the given id and data
     }
-    // Create a new booking document in the subcollection
-    //    roomSubcollectionRef.document(id).set(new Bookings(id, roomName, reason, selected_date, timeSlot))
-    //      .addOnCompleteListener(new OnCompleteListener<Void>() {
-    //        @Override
-    //        public void onComplete(@NonNull Task<Void> task) {
-    //            pd.dismiss();
-    //            if (task.isSuccessful()) {
-    //                Toast.makeText(TimeSlotActivity.this, "Booking added successfully!", Toast.LENGTH_SHORT).show();
-    //           } else {
-    //               Toast.makeText(TimeSlotActivity.this, "Failed to add booking", Toast.LENGTH_SHORT).show();
-    //           }
-    //        }
-    //     });
+
+    private void updateSelectedTimeSlotStatus(String selected_date, String timeslot) {
+        // Get a reference to the "Timeslot" collection
+        CollectionReference timeSlotRef = db.collection("Timeslot");
+
+        // Query for the specific time slot document using the selected_date and timeslot
+        Query query = timeSlotRef.whereEqualTo("date", selected_date).whereEqualTo("timeslot", timeslot);
+
+        // Execute the query
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Check if any document matches the query
+                    if (!task.getResult().isEmpty()) {
+                        // Get the first document (assuming there is only one matching document)
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+
+                        // Update the "status" field of the document to "booked"
+                        document.getReference().update("status", "booked")
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            // Success, document updated
+                                            // Now notify the adapter to refresh the view and update the appearance
+                                            adapterTimeSlot.notifyDataSetChanged();
+                                        } else {
+                                            // Failed to update the document
+                                            Toast.makeText(TimeSlotActivity.this, "Failed to update time slot status", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    } else {
+                        // No matching documents found
+                        Toast.makeText(TimeSlotActivity.this, "Time slot document not found", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // Failed to execute the query
+                    Toast.makeText(TimeSlotActivity.this, "Error fetching time slot data", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
 }

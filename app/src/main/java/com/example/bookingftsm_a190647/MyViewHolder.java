@@ -32,15 +32,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                 mClickListener.onItemClick(view, getAdapterPosition());
             }
         });
-        //item long click listener
-        itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                mClickListener.onItemLongClick(view, getAdapterPosition());
 
-                return false;
-            }
-        });
 
         roomName = itemView.findViewById(R.id.tvRoomName);
         roomLocation = itemView.findViewById(R.id.tvRoomLocation);
