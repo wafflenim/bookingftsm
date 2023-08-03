@@ -18,18 +18,14 @@ import java.util.List;
 
 public class TimeSlotAdapter extends BaseAdapter {
 
-    Context context;
-    List<TimeSlot> modelList;
-    List<CardView> cardViewList;
+    private Context context;
+    private List<TimeSlot> modelList;
     private int selectedPosition = -1; // -1 means no time slot is selected initially
-
 
     public TimeSlotAdapter(Context context, List<TimeSlot> modelList) {
         this.context = context;
         this.modelList = modelList;
-        cardViewList = new ArrayList<>();
     }
-
 
     @Override
     public int getCount() {
@@ -82,43 +78,37 @@ public class TimeSlotAdapter extends BaseAdapter {
         TextView txtTimeSlotDescription = convertView.findViewById(R.id.txt_time_slot_description);
 
         TimeSlot timeSlot = modelList.get(position);
-        txtTimeSlot.setText(Common.convertTimeSlotToString(position));
+        String slotValue = Common.convertTimeSlotToString(position);
+        txtTimeSlot.setText(slotValue);
 
-        if (modelList.size() == 0) {
+        String status = timeSlot.getStatus();
+
+        if (status.equals("Booked")) {
+            txtTimeSlotDescription.setText("Booked");
+            convertView.setEnabled(false); // Disable booked time slots
+            convertView.setBackgroundResource(android.R.color.darker_gray);
+        } else {
             txtTimeSlotDescription.setText("Available");
             convertView.setEnabled(true);
             convertView.setBackgroundResource(selectedPosition == position ? R.color.blue : android.R.color.holo_red_light);
-        } else {
-            boolean isBooked = false;
-            for (TimeSlot slotValue : modelList) {
-                String slot = slotValue.getTimeslot();
-                if (slot.equals(Common.convertTimeSlotToString(position))) {
-                    isBooked = true;
-                    break;
-                }
-            }
-            if (isBooked) {
-                txtTimeSlotDescription.setText("Booked");
-                convertView.setEnabled(false);
-                convertView.setBackgroundResource(android.R.color.darker_gray);
-            } else {
-                txtTimeSlotDescription.setText("Available");
-                convertView.setEnabled(true);
-                convertView.setBackgroundResource(selectedPosition == position ? R.color.blue : android.R.color.holo_red_light);
-            }
-
-
         }
+
         return convertView;
     }
+
+
+    // Method to update the background color of the time slot based on the booking status
+    public void updateTimeSlotBackground(String timeslot, String status) {
+        // Find the TimeSlot object with the given timeslot value
+        for (TimeSlot timeSlot : modelList) {
+            if (timeSlot.getTimeslot().equals(timeslot)) {
+                // Update the booking status for the specific time slot
+                timeSlot.setStatus(status);
+                break;
+            }
+        }
+
+        // Notify the adapter that the data has changed and refresh the view
+        notifyDataSetChanged();
+    }
 }
-
-
-
-
-
-
-
-
-
-

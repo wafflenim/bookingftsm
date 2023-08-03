@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageView tempah_ruang_main_btn, noti_main_btn, tetapan_main_btn;
+    ImageView tempah_ruang_main_btn, noti_main_btn, tetapan_main_btn, sejarah_main_btn;
     Button btn_logout;
 
     private FirebaseAuth mFirebaseAuth;
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         tempah_ruang_main_btn = findViewById(R.id.tempah_ruang_main_btn);
         noti_main_btn = findViewById(R.id.noti_main_btn);
         tetapan_main_btn = findViewById(R.id.tetapan_main_btn);
+        sejarah_main_btn = findViewById(R.id.sejarah_main_btn);
    //     btn_logout = findViewById(R.id.btn_logout);
         mFirebaseAuth = FirebaseAuth.getInstance();
         sFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -47,15 +48,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        btn_logout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FirebaseAuth.getInstance().signOut();
-//                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
+        tetapan_main_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                startActivity(intent);
+                //               finish();
+            }
+        });
+
+        noti_main_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), NotificationActivity.class);
+                startActivity(intent);
+                //               finish();
+            }
+        });
+
+
 
     }
 

@@ -1,27 +1,21 @@
 package com.example.bookingftsm_a190647;
 
 public class Bookings {
-    private String id;
+
     private String roomName;
     private String reason;
     private String date;
     private String timeSlot;
 
-    public Bookings(String id, String roomName, String reason, String date, String timeSlot) {
-        this.id = id;
+    public Bookings(String roomName, String reason, String date, String timeSlot) {
+
         this.roomName = roomName;
         this.reason = reason;
         this.date = date;
         this.timeSlot = timeSlot;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getRoomName() {
         return roomName;

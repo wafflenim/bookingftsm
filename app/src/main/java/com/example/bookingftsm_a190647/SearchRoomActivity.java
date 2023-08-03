@@ -24,6 +24,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,6 +42,8 @@ import java.util.List;
 
 public class SearchRoomActivity extends AppCompatActivity {
 
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser = firebaseAuth.getCurrentUser();
     EditText inputSearch;
     RecyclerView recyclerViewRoom;
     FirebaseRecyclerOptions<Room> options;

@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BookingFTSM_A190647">
         <activity
+            android:name=".SuccessBookingActivity"
+            android:exported="false" />
+        <activity
             android:name=".BilikKuliah1_details"
             android:exported="false" />
         <activity
