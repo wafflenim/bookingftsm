@@ -297,7 +297,8 @@ public class TimeSlotActivity extends AppCompatActivity {
 
 
         // Add the booking data to the "Bookings" subcollection
-        bookedTimeSlotsRef.document(id).set(new Bookings(roomName, reason, selected_date, timeslot))
+
+        bookedTimeSlotsRef.document(id).set(new Bookings(roomName, reason, selected_date, timeslot, userEmail))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

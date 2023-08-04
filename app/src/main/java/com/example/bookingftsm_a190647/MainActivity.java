@@ -28,12 +28,11 @@ public class MainActivity extends AppCompatActivity {
         noti_main_btn = findViewById(R.id.noti_main_btn);
         tetapan_main_btn = findViewById(R.id.tetapan_main_btn);
         sejarah_main_btn = findViewById(R.id.sejarah_main_btn);
-   //     btn_logout = findViewById(R.id.btn_logout);
+        //     btn_logout = findViewById(R.id.btn_logout);
         mFirebaseAuth = FirebaseAuth.getInstance();
         sFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        if (mFirebaseAuth == null)
-        {
+        if (mFirebaseAuth == null) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
@@ -44,7 +43,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SearchRoomActivity.class);
                 startActivity(intent);
- //               finish();
+                //               finish();
+            }
+        });
+
+        sejarah_main_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
+                startActivity(intent);
+                //               finish();
             }
         });
 
@@ -66,9 +74,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+//        btn_logout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FirebaseAuth.getInstance().signOut();
+//                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//                startActivity(intent);
+//
+//            }
+//        });
+//    }
 
     }
+    }
+
 
  //   @Override
   //  protected void onPostResume() {
@@ -84,4 +103,3 @@ public class MainActivity extends AppCompatActivity {
    //     }
 
   //  }
-}

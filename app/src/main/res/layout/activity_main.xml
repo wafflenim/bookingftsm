@@ -109,8 +109,17 @@
                 app:srcCompat="@drawable/tetapan_png" />
         </LinearLayout>
 
-    </LinearLayout>
 
+    </LinearLayout>
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Keluar"
+            android:layout_marginTop="70dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/red"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -1,170 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notification"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF6F9"
+    android:background="#FFFFFF"
+
+    android:orientation="vertical"
     tools:context=".SettingActivity">
 
-    <LinearLayout
-        android:id="@+id/ll_setting_notif"
+    <FrameLayout
+        android:id="@+id/frame_mainmenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="#FF5757"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
 
-        <TextView
-            android:id="@+id/tv_notif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Notification"
-            android:textColor="#000000"
-            android:textSize="24sp" />
-
-        <Switch
-            android:id="@+id/switch_notif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="#F50057"
-            android:textColor="#F50057"
-            android:textColorHighlight="#F50057"
-            android:textColorLink="#F50057"
-            android:textSize="24sp"
-            android:thumbTint="#FFEA00"
-            tools:ignore="TouchTargetSizeCheck" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_setting_language"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_setting_notif">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textview"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_setting_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Language"
-            android:textColor="#000000"
-            android:textSize="24sp" />
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_language"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Tetapan"
+                android:textColor="@color/red"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_setting_notif"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="English"
-            android:textAlignment="viewEnd"
-            android:textColor="#000000"
-            android:textSize="24sp" />
-    </LinearLayout>
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/red"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_setting_title">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_setting_language">
+            <TextView
+                android:id="@+id/tv_notif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/red"
+                android:text="Notification"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            <Switch
+                android:id="@+id/switch_notif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/red"
+                android:buttonTint="#00A7F5"
+                android:textColor="#2196F3"
+                android:textColorHighlight="#2196F3"
+                android:textColorLink="#2196F3"
+                android:textSize="24sp"
+                android:thumbTint="@color/blue"
+                tools:ignore="TouchTargetSizeCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_setting_darkmode"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Connection"
-            android:textColor="#000000"
-            android:textSize="24sp" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/red"
+            android:backgroundTint="@color/red"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll_setting_notif">
 
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_darkmode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/red"
+                android:text="Dark Mode:"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <Switch
+                android:id="@+id/switch_darkmode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/red"
+                android:textColorLink="#FFEA00"
+                android:textSize="24sp"
+                android:thumbTint="@color/blue"
+                tools:ignore="TouchTargetSizeCheck" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_setting_logout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="24sp" />
-    </LinearLayout>
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll_setting_darkmode">
 
-    <LinearLayout
-        android:id="@+id/ll_setting_wifi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+            <TextView
+                android:id="@+id/tv_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/red"
+                android:text="Log Keluar"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Wifi"
-            android:textColor="#000000"
-            android:textSize="24sp" />
 
-        <Switch
-            android:id="@+id/switch_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColorLink="#FFEA00"
-            android:textSize="24sp"
-            android:thumbTint="#FFEA00"
-            tools:ignore="TouchTargetSizeCheck" />
-    </LinearLayout>
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_setting_data"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_setting_wifi">
 
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Mobile Data"
-            android:textColor="#000000"
-            android:textSize="24sp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Switch
-            android:id="@+id/switch_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColorLink="#00B0FF"
-            android:textSize="24sp"
-            android:thumbTint="#FFEA00"
-            tools:ignore="TouchTargetSizeCheck" />
-    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

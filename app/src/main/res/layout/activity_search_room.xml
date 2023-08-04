@@ -25,11 +25,11 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/input_search"
-        android:drawableRight="@drawable/ic_search"
+        android:drawableEnd="@drawable/ic_search"
         android:hint="Cari Nama Bilik"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="8dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="8dp"
         app:actionViewClass="android.support.v7.widget.SearchView"
         />
@@ -39,7 +39,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/action_search" />
-
-
 
 </RelativeLayout>
