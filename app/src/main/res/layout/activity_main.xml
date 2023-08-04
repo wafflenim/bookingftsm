@@ -5,7 +5,7 @@
     android:id="@+id/bookingftsm"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/backgroundColor"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -39,7 +39,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#FFFFFF">
+       >
 
         <TextView
             android:id="@+id/textView"

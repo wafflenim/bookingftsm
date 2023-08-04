@@ -6,4 +6,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#18FFFF</color>
     <color name="dark_blue">#585858</color>
+
+    <!-- Normal/Light Mode -->
+    <color name="backgroundColor" >#FFFFFFFF </color>
 </resources>

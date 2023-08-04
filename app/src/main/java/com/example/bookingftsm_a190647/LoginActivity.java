@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                                    // Log.d(TAG, "signInWithEmail:success");
                                    // FirebaseUser user = mFirebaseAuth.getCurrentUser();
                                    // updateUI(user);
-                                    Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Log masuk Berjaya", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                     finish();
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                                 else {
                                     // If sign in fails, display a message to the user.
                                    // Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.makeText(LoginActivity.this, "Emel atau kata kekunci salah.",
                                             Toast.LENGTH_SHORT).show();
                                   //  updateUI(null);
                                 }

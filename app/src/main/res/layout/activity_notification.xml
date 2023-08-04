@@ -5,7 +5,7 @@
     android:id="@+id/notification"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B8FFFC"
+    android:background="@color/backgroundColor"
     android:orientation="vertical"
     tools:context=".NotificationActivity">
 
