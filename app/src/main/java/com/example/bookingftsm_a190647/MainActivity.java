@@ -1,8 +1,10 @@
 package com.example.bookingftsm_a190647;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,10 +20,24 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser sFirebaseUser;
+    private SharedPreferences sharedPreferences;
+    private static final String SHARED_PREFS = "sharedPrefs";
+    private static final String DARK_MODE = "isDarkModeOn";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Retrieve the dark mode setting from SharedPreferences
+        sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        boolean isDarkModeOn = sharedPreferences.getBoolean(DARK_MODE, false);
+
+        // Apply the selected mode immediately
+        if (isDarkModeOn) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         setContentView(R.layout.activity_main);
 
         tempah_ruang_main_btn = findViewById(R.id.tempah_ruang_main_btn);
