@@ -180,7 +180,7 @@ public class TimeSlotActivity extends AppCompatActivity {
 
                     uploadData(roomName, reason, selected_date, timeSlot, userEmail);
                 } else {
-                    Toast.makeText(TimeSlotActivity.this, "Please select a time slot.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TimeSlotActivity.this, "Sila pilih slot masa.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -226,10 +226,10 @@ public class TimeSlotActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         // The time slot is already booked, add it to the modelList with status "Booked"
-                        modelList.add(new TimeSlot(timeSlot, "Booked"));
+                        modelList.add(new TimeSlot(timeSlot, "Penuh"));
                     } else {
                         // The time slot is available, add it to the modelList with status "Available"
-                        modelList.add(new TimeSlot(timeSlot, "Available"));
+                        modelList.add(new TimeSlot(timeSlot, "Sedia"));
                     }
 
                     // Check if all queries are completed
@@ -275,7 +275,7 @@ public class TimeSlotActivity extends AppCompatActivity {
     // Upload booking data to Firestore
     private void uploadData(String roomName, String reason, String selected_date, String timeslot, String userEmail) {
         ProgressDialog pd = new ProgressDialog(this);
-        pd.setTitle("Adding Booking to Database");
+        pd.setTitle("Menambah tempahan...");
         pd.show();
 
         // Random id for the booking
@@ -305,7 +305,7 @@ public class TimeSlotActivity extends AppCompatActivity {
                         pd.dismiss();
                         if (task.isSuccessful()) {
                             // Success, booking added to Firestore
-                            Toast.makeText(TimeSlotActivity.this, "Booking added successfully!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TimeSlotActivity.this, "Penempahan berjaya!", Toast.LENGTH_SHORT).show();
 
                             // Call a method to update the Firestore document for the selected time slot as booked
                           //  updateSelectedTimeSlotStatus(selected_date, timeslot);
@@ -323,7 +323,7 @@ public class TimeSlotActivity extends AppCompatActivity {
                             startActivity(successBookingIntent);
                         } else {
                             // Failed to add booking
-                            Toast.makeText(TimeSlotActivity.this, "Failed to add booking", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TimeSlotActivity.this, "Penempahan gagal", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -331,7 +331,7 @@ public class TimeSlotActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(TimeSlotActivity.this, "Failed to add booking", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TimeSlotActivity.this, "Penempahan gagal", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

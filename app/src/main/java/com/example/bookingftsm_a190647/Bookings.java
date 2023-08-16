@@ -78,7 +78,7 @@ public class Bookings {
 
     @Override
     public int hashCode() {
-        return Objects.hash(roomName, reason, date, timeSlot,user);
+        return Objects.hash(roomName, reason, date, timeSlot, user);
     }
 
 }

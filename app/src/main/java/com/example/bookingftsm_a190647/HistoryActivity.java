@@ -1,4 +1,3 @@
-
 package com.example.bookingftsm_a190647;
 
 import android.app.ProgressDialog;
@@ -6,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -30,7 +31,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -60,13 +63,9 @@ public class HistoryActivity extends AppCompatActivity {
         showData("");
 
         historyAdapter.setOnItemLongClickListener(new HistoryAdapter.ClickListener() {
-
-
             @Override
             public void onItemClick(View view, int position) {
-                Bookings booking = bookingList.get(position);
-                // Show a confirmation dialog before deleting the booking
-                showDeleteConfirmationDialog(booking);
+                // Implement the item click action if needed
             }
 
             @Override
@@ -76,6 +75,20 @@ public class HistoryActivity extends AppCompatActivity {
                 showDeleteConfirmationDialog(booking);
             }
         });
+//        historyAdapter.setOnItemLongClickListener(new HistoryAdapter.ClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                Bookings booking = bookingList.get(position);
+//                // Show a confirmation dialog before deleting the booking
+//                showDeleteConfirmationDialog(booking);
+//            }
+//            @Override
+//            public void onItemLongClick(View view, int position) {
+//                Bookings booking = bookingList.get(position);
+//                // Show a confirmation dialog before deleting the booking
+//                showDeleteConfirmationDialog(booking);
+//            }
+//        });
     }
 
     private void deleteBookingFromDatabase(Bookings booking) {
@@ -85,7 +98,7 @@ public class HistoryActivity extends AppCompatActivity {
         Query query = bookedTimeSlotsRef.whereEqualTo("user", userEmail)
                 .whereEqualTo("roomName", booking.getRoomName())
                 .whereEqualTo("date", booking.getDate())
-                .whereEqualTo("timeslot", booking.getTimeSlot());
+                .whereEqualTo("timeSlot", booking.getTimeSlot());
 
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -94,13 +107,16 @@ public class HistoryActivity extends AppCompatActivity {
                     document.getReference().delete()
                             .addOnSuccessListener(aVoid -> {
                                 // Successfully deleted
-                                Toast.makeText(HistoryActivity.this, "Booking deleted successfully", Toast.LENGTH_SHORT).show();
+                                String notificationMessage = "Tempahan anda untuk " + booking.getReason() + " di " + booking.getRoomName() + " pada " + booking.getDate() + " pada pukul " + booking.getTimeSlot() + " telah dibatalkan.";
+                                addNotificationToDatabase(notificationMessage);
+                                Toast.makeText(HistoryActivity.this, "Tempahan berjaya dibatalkan", Toast.LENGTH_SHORT).show();
                                 // Refresh the booking list
                                 showData("");
                             })
                             .addOnFailureListener(e -> {
                                 // Error deleting the booking
-                                Toast.makeText(HistoryActivity.this, "Failed to delete booking", Toast.LENGTH_SHORT).show();
+                                Log.d("HistoryActivity", "Failed to delete booking: " + e.getMessage());
+                                Toast.makeText(HistoryActivity.this, "Pembatalan gagal", Toast.LENGTH_SHORT).show();
                             });
                 }
             } else {
@@ -112,16 +128,17 @@ public class HistoryActivity extends AppCompatActivity {
 
     private void showDeleteConfirmationDialog(Bookings booking) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete Booking");
-        builder.setMessage("Are you sure you want to delete this booking?");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setTitle("Batal Tempahan");
+        builder.setMessage("Adakah anda pasti untuk membatalkan tempahan ini?");
+        builder.setPositiveButton("Batal", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Call the method to delete the booking from the database
+                Log.d("HistoryActivity", "Deleting booking from dialog: " + booking.getRoomName() + " - " + booking.getDate() + " - " + booking.getTimeSlot());
                 deleteBookingFromDatabase(booking);
             }
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("Kembali", null);
         builder.show();
     }
 
@@ -142,7 +159,7 @@ public class HistoryActivity extends AppCompatActivity {
                         String roomName = doc.getString("roomName");
                         String reason = doc.getString("reason");
                         String date = doc.getString("date");
-                        String timeSlot = doc.getString("timeslot");
+                        String timeSlot = doc.getString("timeSlot");
 
                         // Retrieve the document ID directly and pass it to the adapter
                         String documentId = doc.getId();
@@ -150,11 +167,33 @@ public class HistoryActivity extends AppCompatActivity {
                         bookingList.add(model);
                     }
 
-                    historyAdapter.notifyDataSetChanged();
+                    historyAdapter.notifyDataSetChanged(); // Notify the adapter of the data change
                 } else {
                     Toast.makeText(HistoryActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
+    private void addNotificationToDatabase(String notificationMessage) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        // Create a new notification document in the "Notifications" collection
+        Map<String, Object> notificationData = new HashMap<>();
+        notificationData.put("userEmail", userEmail);
+        notificationData.put("message", notificationMessage);
+        notificationData.put("timestamp", FieldValue.serverTimestamp());
+
+        db.collection("Notifications").add(notificationData)
+                .addOnSuccessListener(documentReference -> {
+                    // Notification added successfully
+                    // You can perform any additional actions here if needed
+                })
+                .addOnFailureListener(e -> {
+                    // Failed to add notification
+                    // Handle the error if needed
+                });
+    }
+
 }

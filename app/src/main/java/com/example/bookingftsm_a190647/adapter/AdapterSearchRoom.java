@@ -29,6 +29,11 @@ public class AdapterSearchRoom extends RecyclerView.Adapter<MyViewHolder>{
         this.modelList = modelList;
         }
 
+    public void filterList(List<Room> filteredList) {
+        modelList = filteredList;
+        notifyDataSetChanged();
+    }
+
 
 @NonNull
 @Override

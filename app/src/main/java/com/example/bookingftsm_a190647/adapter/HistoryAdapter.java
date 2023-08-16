@@ -3,6 +3,7 @@ package com.example.bookingftsm_a190647.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.textViewDate.setText(booking.getDate());
         holder.textViewTimeSlot.setText(booking.getTimeSlot());
         holder.textViewReason.setText(booking.getReason());
+
+        Log.d("HistoryAdapter", "Time Slot for Item " + position + ": " + booking.getTimeSlot());
     }
 
     @Override
@@ -48,21 +51,30 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         return bookingList.size();
     }
 
-    public void setOnItemClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    public void setOnItemLongClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
+//    public void setOnItemClickListener(ClickListener clickListener) {
+//        this.clickListener = clickListener;
+//    }
+//
+//    public void setOnItemLongClickListener(ClickListener clickListener) {
+//        this.clickListener = clickListener;
+//    }
+//
+//    public interface ClickListener {
+//        void onItemClick(View view, int position);
+//
+//        void onItemLongClick(View view, int position);
+//    }
+public void setOnItemLongClickListener(ClickListener clickListener) {
+    this.clickListener = clickListener;
+}
 
     public interface ClickListener {
         void onItemClick(View view, int position);
-
         void onItemLongClick(View view, int position);
+
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         TextView textViewRoomName;
         TextView textViewDate;
         TextView textViewTimeSlot;
@@ -84,16 +96,55 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 }
             });
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if (clickListener != null) {
-                        clickListener.onItemLongClick(view, getAdapterPosition());
-                        return true;
-                    }
-                    return false;
-                }
-            });
+            // Set the long-click listener for the itemView
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (clickListener != null) {
+                clickListener.onItemLongClick(view, getAdapterPosition());
+                return true;
+            }
+            return false;
         }
     }
 }
+
+//    public class ViewHolder extends RecyclerView.ViewHolder {
+//        TextView textViewRoomName;
+//        TextView textViewDate;
+//        TextView textViewTimeSlot;
+//        TextView textViewReason;
+//
+//        public ViewHolder(View itemView) {
+//            super(itemView);
+//            textViewRoomName = itemView.findViewById(R.id.textViewRoomName);
+//            textViewDate = itemView.findViewById(R.id.textViewDate);
+//            textViewTimeSlot = itemView.findViewById(R.id.textViewTimeSlot);
+//            textViewReason = itemView.findViewById(R.id.textViewReason);
+//
+//
+//
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (clickListener != null) {
+//                        clickListener.onItemClick(view, getAdapterPosition());
+//                    }
+//                }
+//            });
+
+//            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View view) {
+//                    if (clickListener != null) {
+//                        clickListener.onItemLongClick(view, getAdapterPosition());
+//                        return true;
+//                    }
+//                    return false;
+//                }
+//            });
+//        }
+//    }
+//}

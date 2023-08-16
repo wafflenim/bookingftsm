@@ -80,7 +80,7 @@ public class SearchRoomActivity extends AppCompatActivity {
         pd.setTitle("Sedang memuat turun senarai bilik....");
         pd.show();
 
-        showData(""); //show data without any search
+        showAllRooms(); //show data without any search
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -94,30 +94,30 @@ public class SearchRoomActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-            if (editable.toString()!=null)
-            {
-                showData(editable.toString()); //show data based on search
-            }
-            else
-            {
-                showData("");
-            }
+                String searchText = editable.toString().toLowerCase();
+                filterRooms(searchText); // Filter rooms based on user input
             }
         });
 
     }
+
+    private void filterRooms(String searchText) {
+        List<Room> filteredList = new ArrayList<>();
+
+        for (Room room : modelList) {
+            if (room.getRoomName().toLowerCase().contains(searchText)) {
+                filteredList.add(room);
+            }
+        }
+
+        adapterSearchRoom.filterList(filteredList);
+    }
+
     //String data == the text in the search input. if "" then just display all
-    private void showData(String searchText) {
-
-
-        // Get a reference to the "Room Booking" collection
+    private void showAllRooms() {
         CollectionReference roomBookingRef = db.collection("Room Booking");
 
-        // Use the whereGreaterThanOrEqualTo and whereLessThanOrEqualTo methods for partial search
-        Query query = roomBookingRef.whereGreaterThanOrEqualTo("name", searchText)
-                .whereLessThanOrEqualTo("name", searchText + "\uf8ff");
-
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        roomBookingRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 modelList.clear();
@@ -146,5 +146,6 @@ public class SearchRoomActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }

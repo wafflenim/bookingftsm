@@ -83,12 +83,12 @@ public class TimeSlotAdapter extends BaseAdapter {
 
         String status = timeSlot.getStatus();
 
-        if (status.equals("Booked")) {
-            txtTimeSlotDescription.setText("Booked");
+        if (status.equals("Penuh")) {
+            txtTimeSlotDescription.setText("Penuh");
             convertView.setEnabled(false); // Disable booked time slots
             convertView.setBackgroundResource(android.R.color.darker_gray);
         } else {
-            txtTimeSlotDescription.setText("Available");
+            txtTimeSlotDescription.setText("Sedia");
             convertView.setEnabled(true);
             convertView.setBackgroundResource(selectedPosition == position ? R.color.blue : android.R.color.holo_red_light);
         }
